@@ -9,7 +9,8 @@ INC_DIR = includes
 
 LIBFT = $(LIBFT_DIR)/libft.a
 
-SRC = 	$(SRC_DIR)/pipex.c
+SRC = 	$(SRC_DIR)/pipex.c \
+        $(SRC_DIR)/pipex_utils.c
 
 OBJ = $(patsubst $(SRC_DIR)/%,$(OBJ_DIR)/%,$(SRC:.c=.o))
 
