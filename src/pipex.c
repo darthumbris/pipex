@@ -6,7 +6,7 @@
 /*   By: shoogenb <shoogenb@student.codam.nl>         +#+                     */
 /*                                                   +#+                      */
 /*   Created: 2021/12/17 15:43:56 by shoogenb      #+#    #+#                 */
-/*   Updated: 2022/01/17 16:05:12 by shoogenb      ########   odam.nl         */
+/*   Updated: 2022/01/18 09:39:09 by shoogenb      ########   odam.nl         */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	child_process_cmd2(int outfile_fd, char **argv, char **envp, int fd[2])
 	command_exec(paths, cmd_args, envp);
 	ft_putstr_fd(cmd_args[0], 2);
 	ft_putendl_fd(": command not found", 2);
+	free_cmd_args(cmd_args);
 	exit(127);
 }
 
@@ -57,6 +58,7 @@ void	child_process_cmd1(int infile_fd, char **argv, char **envp, int fd[2])
 	command_exec(paths, cmd_args, envp);
 	ft_putstr_fd(cmd_args[0], 2);
 	ft_putendl_fd(": command not found", 2);
+	free_cmd_args(cmd_args);
 	exit(127);
 }
 
@@ -68,7 +70,7 @@ void	pipex(int infile_fd, int outfile_fd, char **argv, char **envp)
 	pid_t	child1_pid;
 	pid_t	child2_pid;
 	int		fd[2];
-	int		done;
+	int		status;
 
 	pipe(fd);
 	child1_pid = fork();
@@ -83,9 +85,9 @@ void	pipex(int infile_fd, int outfile_fd, char **argv, char **envp)
 		child_process_cmd2(outfile_fd, argv, envp, fd);
 	close(fd[0]);
 	close(fd[1]);
-	waitpid(child1_pid, &done, 0);
-	waitpid(child2_pid, &done, 0);
-	exit(WEXITSTATUS(done));
+	waitpid(child1_pid, &status, 0);
+	waitpid(child2_pid, &status, 0);
+	exit(WEXITSTATUS(status));
 }
 
 int	main(int argc, char **argv, char **envp)
